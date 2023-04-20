@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- Bootstrap CSS, JS, and jQuery -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+		<style>
+		table {
+			table-layout: fixed;
+			width: 50%;
+		 }
+		  table td {
+			width: auto;
+			max-width: 0;
+		  }
+
+		  table td.expand {
+			width: 20px;
+		  }
+
+		  th:first-child{
+		      background-color: white;
+		  }
+        input:focus {
+            border: 3px solid red;
+            outline: none;
+        }
+		</style>
+		
+        <title>Adjective Similarity Calculator</title>
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="jumbotron jumbotron-fluid" style="background-size: cover;">
+                <div class="container">
+                    <h1 class="display-4">ADJECTIVE SIMILARITY CALCULATOR</h1>
+                    <p class="lead">Enter a word and the calculator shows how adjectival its behavior is in the Estonian National Corpus 2021.</p>
+                </div>
+            </div>
+			<div class="input-group mb-3">
+				<form method="post" id="search-form">
+					<input type="text" id="search" name="search" placeholder="Enter your word here" style="text-align: center;">
+					<br>
+					<br>
+					<div id="table_area">
+						{% if search_term %}
+							{% if results|length > 0 %}
+								<table border=1 style="width:100%">
+									<tr style="background:#D1D1D1;">
+										<th style="text-align: center; border: 2px solid red;">{{ results[1][1] }}</th>
+										<th style="text-align: center;">lemma</th>
+										<th style="text-align: center;">ATTR</th>
+										<th style="text-align: center;">ATTR/ST</th>
+										<th style="text-align: center;">ADV</th>
+										<th style="text-align: center;">PRED</th>
+										<th style="text-align: center;">total score</th>
+										<th style="text-align: center;">adjectivity</th>
+
+									</tr>
+									{% for row in results %}
+										<tr>
+											<td class="expand" style="text-align: center; background:#D1D1D1;"><b>{{ row[0] }}</b></td>
+											<td class="expand" style="text-align: center;">{% if results[1][1] != row[1] %}{{ row[1] }}{% endif %}</td>
+											<td class="expand" style="text-align: center;">{{ row[2] }}</td>
+											<td class="expand" style="text-align: center;">{{ row[3] }}</td>
+											<td class="expand" style="text-align: center;">{{ row[4] }}</td>
+											<td class="expand" style="text-align: center;">{{ row[5] }}</td>
+											<td class="expand" style="text-align: center;">{{ row[6] }}</td>
+											<td class="expand" style="text-align: center; background-color:  {{ row[7] }}">{{ row[8] }}</td>
+										</tr>
+									{% endfor %}
+								</table>
+								</br>
+								</br>
+								<table border=1 style="width:21%" align="right">
+									<th style="text-align: center; width:10%">Values</th>
+									<th style="text-align: center;; width:15%"> Scale</th>
+									<tr>
+										<td style="text-align: center;">4</td>
+										<td style="text-align: center; background-color:#52BE80;">very likely</td>
+									</tr>
+									<tr>
+										<td style="text-align: center;">3</td>
+										<td style="text-align: center; background-color:#A9DFBF;">likely</td>
+									</tr>
+									<tr>
+										<td style="text-align: center;">2</td>
+										<td style="text-align: center; background-color:#FCF3CF;">ambiguous</td>
+									</tr>
+									<tr>
+										<td style="text-align: center;">1</td>
+										<td style="text-align: center; background-color:#F5B7B1;">unlikely</td>
+									</tr>
+									<tr>
+										<td style="text-align: center;">0</td>
+										<td style="text-align: center; background-color:#EC7063;">very unlikely</td>
+									</tr>
+								</table>
+
+							{% else %}
+								<p>No results.</>
+							{% endif %}
+						{% endif %}
+						
+
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+
+    </body>
+</html>
