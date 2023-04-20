@@ -5,8 +5,8 @@ adverbs = ["väga", "üsna", "päris", "piisavalt", "niivõrd", "suhteliselt", "
 
 def query_function(query):
 
-    USERNAME = 'ALohk'
-    API_KEY = '339e5710e43e47ba8f51761aeb829a02'
+    USERNAME = 'A...k'
+    API_KEY = '339...a02'
     base_url = 'https://api.sketchengine.eu/bonito/run.cgi'
 
 
