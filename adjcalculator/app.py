@@ -9,7 +9,6 @@ def query_function(query):
     API_KEY = '339...a02'
     base_url = 'https://api.sketchengine.eu/bonito/run.cgi'
 
-
     CORPUS = 'preloaded/estonian_nc21'
     fcrit = 'longtag 0'
     #showresults = '1'
@@ -30,38 +29,12 @@ def query_function(query):
         count = 0
     return count
 
-def query_function_view(query):
-
-    USERNAME = 'A...k'
-    API_KEY = '339...a02'
-    base_url = 'https://api.sketchengine.eu/bonito/run.cgi'
-
-
-    CORPUS = 'preloaded/estonian_nc21'
-    fcrit = 'longtag 0'
-    #showresults = '1'
-    #showFreqs = '1'
-    data_format = 'json'
-
-    data_view = {
-        'corpname': CORPUS,
-        'q': query,
-        'format': data_format
-    }
-
-    response_view = requests.get(base_url + '/view', params=data_view, auth=(USERNAME, API_KEY)).json()
-    count = response_view['fullsize']
-
-    return count
-
-
 def read_words(filename):
     lines = []
     with open(filename, mode = "r", encoding="utf-8") as f:
         for line in f.readlines():
             lines.append(line.strip())
     return lines
-
 
 def adverbs_in_query(adverbs):
     q = '('
@@ -113,15 +86,14 @@ def search():
         row1 = ["frequency"]
         row2 = ["range match"]
 
-
-		# total frequency
+	# total frequency
         total_freq_query = f'q[{token_type}="{search_term}"]'
         total_freq = query_function(total_freq_query)
 
         row1.append(format_number(str(total_freq)))
         row2.append(search_term)
 
-		#lemma_S pattern
+	#lemma_S pattern
         lemma_S_query = f'q[{token_type}="{search_term}"] [tag="S.*"]'
         lemma_S_freq = query_function(lemma_S_query)
         lemma_S_norm_freq = round(lemma_S_freq / total_freq if total_freq > 0 else 0, 3)
@@ -129,16 +101,13 @@ def search():
         row1.append(lemma_S_norm_freq)
         row2.append(is_in_the_range(lemma_S_norm_freq, tol_dict['attr']))
 
-
-
-		#start_lemma_S pattern
+	#start_lemma_S pattern
         s_lemma_S_query = f'q<s>[{token_type}="{search_term}"] [tag="S.*"]'
         s_lemma_S_freq = query_function(s_lemma_S_query)
         s_lemma_S_norm_freq = round(s_lemma_S_freq / total_freq if total_freq > 0 else 0, 3)
 
         row1.append(s_lemma_S_norm_freq)
         row2.append(is_in_the_range(s_lemma_S_norm_freq, tol_dict['attr_st']))
-
 
         #D_list_lemma pattern
         D_list_lemma_query = 'q' + create_adverbs_query(adverbs_with_OR, token_type, search_term)
@@ -148,8 +117,7 @@ def search():
         row1.append(D_list_lemma_norm_freq)
         row2.append(is_in_the_range(D_list_lemma_norm_freq, tol_dict['adv']))
 
-
-		#be_D_list_lemma pattern
+	#be_D_list_lemma pattern
         tag2 = "olema"
         be_D_listQmark_lemma_query = f'q[lemma="{tag2}"]' + create_adverbs_query_with_Qmark(adverbs_with_OR, token_type, search_term)
         be_D_listQmark_lemma_freq = query_function(be_D_listQmark_lemma_query)
@@ -157,7 +125,6 @@ def search():
 
         row1.append(be_D_listQmark_lemma_norm_freq)
         row2.append(is_in_the_range(be_D_listQmark_lemma_norm_freq, tol_dict['pred']))
-
 
         total_score = is_in_the_range(lemma_S_norm_freq, tol_dict['attr']) \
               + is_in_the_range(s_lemma_S_norm_freq, tol_dict['attr_st']) \
@@ -167,14 +134,11 @@ def search():
         row1.append("")
         row2.append(total_score)
 
-
         row1.append("")
         row2.append(color_dict[total_score])
 
-
         row1.append("")
         row2.append(label_dict[total_score])
-
 
         results.append(row1)
         results.append(row2)
